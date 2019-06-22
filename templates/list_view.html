@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CH">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <title>list_view</title>
+    {#引入bootstrap样式css文件#}
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    {#引入sweetlert弹出框css文件#}
+    <link rel="stylesheet" href="/static/sweetalert.css">
+    {#引入fount-awesome图标库css文件#}
+    <link rel="stylesheet" href="/static/font-awesome-4.7.0/css/font-awesome.css">
+    <style>
+        {# 用于修改sweetalert中 中文显示出现重叠 #}
+        .sa-icon.sa-success.animate {
+            margin-bottom: 30px;
+        }
+        {# 用于list_filter展示字体颜色 class=filter 默认 选中后 class=shine #}
+        .filter a{
+            color: #808080;
+        }
+        .shine{
+            color: #000000!important;
+        }
+    </style>
+</head>
+<body>
+{#引入bootstrap面板样式#}
+<div class="panel panel-default">
+    <div class="panel-heading"><h3>{{ obj_name }}</h3>
+        {#插入添加按钮#}
+        <a class="btn btn-default col-sm-offset-11" href="{{ add_url }}">添加</a>
+    </div>
+    <div class="row"> {# 分情况显示 如果用户定制list_filter 则放开侧边栏 占比9-3 #}
+        {% if view_obj.model_config.list_filter %}
+            <div class="col-sm-9">  {# 左侧侧边栏占9份 #}
+                {% include "list_tbody.html" %} {# 引入组件tbody内容 #}
+            </div>
+            <div class="col-sm-3 filter">  {# 右侧侧边栏占3份 #}
+                {% for filter,temp in view_obj.get_listfilter_linktag.items %}
+                    {# 循环 list_filter 创建面板#}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            BY {{ filter|upper }}
+                        </div>
+                        <div class="panel-body">
+                            {% for tag in temp %}
+                               <p>{{ tag|safe }}</p>
+                            {% endfor %}
+
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div>
+                {% include "list_tbody.html" %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+{#插入分页#}
+<div class="col-sm-offset-8">{{ view_obj.page_html.page_html|safe }}</div>
+{#引入jQuery js文件#}
+<script src="/static/jquery-3.3.1.js"></script>
+{#引入bootstrap样式js文件#}
+<script src="/static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+{#引入sweetlert弹出框js文件#}
+<script src="/static/sweetalert.min.js"></script>
+<script> {# 如果选中表头的checkbox则执行全选空能 #}
+$("#checkbox_all").on('click', function () {
+    if ($(this).prop('checked')) {   {# 如果表头checkbox为选中则触发全部选中 #}
+        $("input[type='checkbox']").prop('checked', true)
+    } else { {#如果表头checkbox为未选中则全部取消#}
+        $("input[type='checkbox']").prop('checked', false)
+    }
+});
+$(".my_delete").on('click', function () { {# 点击删除按钮出发事件 #}
+    var my_url = $(this).attr('url');
+    {# 提前声明my_url 如果成功则跳转url #}
+    swal({
+            {# sweetalert弹出事件模型定义 #}
+            title: "确定要删除此项吗?",
+            text: "确定后此项会永久性的消失",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        },
+        function (isConfirm) {
+            if (isConfirm) { {# 确认删除跳转到删除url执行删除函数 #}
+                swal("删除成功", "您已成功删除此项", 'success');
+                location.href = my_url
+            } else { {# 取消则返回页面 #}
+                swal("删除失败", "您已取消了删除操作", "error");
+            }
+        });
+})
+</script>
+</body>
+</html>

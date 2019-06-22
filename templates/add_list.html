@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CH">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <title>添加页面</title>
+    {#引入bootstrap样式css文件#}
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <style>
+        input, select {
+        {# 借用bootstrap input框样式渲染 #} display: block;
+            width: 100%;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        }
+
+        .form_errors {
+        {# 将error项目渲染为红色 #} color: red;
+
+        }
+    </style>
+</head>
+<body>
+{#插入bootstrap面板样式#}
+<div class="panel panel-default">
+    <div class="panel-heading"><h3>添加{{ obj_name }}</h3></div>
+    {# 引入add_change html组件 #}
+    {% include 'add_change_module.html' %}
+</div>
+{#引入jQuery js文件#}
+<script src="/static/jquery-3.3.1.js"></script>
+{#引入bootstrap样式js文件#}
+<script src="/static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<script>
+    function jump_windows(_url) {   {# 设置jump_windows函数 add 支持特殊字段的临时增加 #}
+        window.open(_url, '', 'width=1200,height=700,top=200,left=200');
+        {#打开新页面 跳转至关联表的add界面#}
+    }
+
+    function pop_css_add(field, pk, text_name) { {# 创建一个函数 用于pop子页面调用的父函数 #}
+        var $new_option = $('<option>');
+        {# 创建一个option标签 #}
+        $new_option.val(pk);
+        {# option标签的value设置为pk值 #}
+        $new_option.html(text_name);
+        {# 添加option text内容 #}
+        $new_option.attr('selected', 'selected');
+        {# 添加属性 默认被选中 #}
+        $('#id_' + field).append($new_option);
+        {# 将标签放到select #}
+    }
+</script>
+</body>
+</html>

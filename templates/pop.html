@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="zh-CH">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <title>pop</title>
+    {#引入bootstrap样式css文件#}
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+</head>
+<body>
+{#引入jQuery js文件#}
+<script src="/static/jquery-3.3.1.js"></script>
+<script>
+    window.opener.pop_css_add('{{ field_name }}', '{{ obj_pk }}', '{{ obj_name }}');
+    window.close()
+</script>
+</body>
+</html>

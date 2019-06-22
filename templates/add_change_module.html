@@ -1,0 +1,24 @@
+<div class="panel-body">
+    <form action="" method="post" novalidate> {# 使用form表单提交数据 #}
+        {% csrf_token %}
+        <div class="col-sm-4">
+            {% for medelform_obj in modelform_class %}
+                <div style="padding-bottom: 20px;position:relative">
+                    {# 拿到数据字段的verbose_name,没有就默认显示字段名 #}
+                    <label for="{{ medelform_obj.id_for_label }}">{{ medelform_obj.label }}</label>
+                    {{ medelform_obj }}
+                    {% if medelform_obj.is_pop %}
+                        {# 如果是添加页面并存在is_pop说明是增加页面并且字段为特殊字段 展示跳转页面并点击触发绑定事件 调用add页面中的 jump_windows 函数 #}
+                        <a href="" style="color: lightskyblue;position: absolute;top: 40%;left: 110%;"
+                           onclick=jump_windows('{{ medelform_obj.url }}')>
+                            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
+                    {% endif %}
+                    <span class="form_errors">{{ medelform_obj.errors.0 }}</span>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="col-sm-1 col-sm-offset-11">
+            <input type="submit" value="提交" class="btn-primary">
+        </div>
+    </form>
+</div>
